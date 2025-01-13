@@ -606,8 +606,46 @@ function propagateItemsByPositionIndex(/* arr */) {
  *    shiftArray(['a', 'b', 'c', 'd'], -1) => ['b', 'c', 'd', 'a']
  *    shiftArray([10, 20, 30, 40, 50], -3) => [40, 50, 10, 20, 30]
  */
-function shiftArray(/* arr, n */) {
-  throw new Error('Not implemented');
+function shiftArray(arr, n) {
+  function moveElements(a, k) {
+    let newArr = a;
+    const tmp = [];
+    let count = k;
+    if (count > 0) {
+      newArr.map((e, i) => {
+        if (i === 0) {
+          tmp.push(newArr[newArr.length - 1]);
+        } else {
+          tmp.push(newArr[i - 1]);
+        }
+        return e;
+      });
+      count -= 1;
+      if (count !== 0) {
+        newArr = moveElements(tmp, count);
+      } else {
+        newArr = tmp;
+      }
+    } else {
+      newArr.map((e, i) => {
+        if (i < newArr.length - 1) {
+          tmp.push(newArr[i + 1]);
+        } else {
+          tmp.push(newArr[0]);
+        }
+        return e;
+      });
+      count += 1;
+      if (count !== 0) {
+        newArr = moveElements(tmp, count);
+      } else {
+        newArr = tmp;
+      }
+    }
+    return newArr;
+  }
+  const res = moveElements(arr, n);
+  return res;
 }
 
 /**
@@ -623,8 +661,36 @@ function shiftArray(/* arr, n */) {
  *   sortDigitNamesByNumericOrder([ 'nine','eight','nine','eight' ]) => [ 'eight','eight','nine','nine']
  *   sortDigitNamesByNumericOrder([ 'one','one','one','zero' ]) => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const digits = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
+  let newArr = arr.map((e) => {
+    let n;
+    if (Object.keys(digits).includes(e)) {
+      n = digits[e];
+    }
+    return n;
+  });
+  newArr = newArr.sort((a, b) => a - b);
+  newArr = newArr.map((e) => {
+    let n;
+    if (Object.values(digits).includes(e)) {
+      n = Object.keys(digits).filter((el) => digits[el] === e);
+      n = n.join('');
+    }
+    return n;
+  });
+  return newArr;
 }
 
 /**
